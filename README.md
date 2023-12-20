@@ -18,7 +18,7 @@ bun dev
 - [ ] General 
   - [ ] remove the .template from the .env.template file and adjust the following variables
 - [ ] NextAuth
-  - [ ] set env NEXTAUTH_SECRET
+  - [ ] set env NEXTAUTH_SECRET openssl rand -base64 32
   - [ ] GOOGLE_CLIENT_ID
   - [ ] GOOGLE_CLIENT_SECRET
 - [ ] Chakra
