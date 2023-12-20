@@ -1,3 +1,5 @@
 {
-  "key": "value"
+  "key": "value",
+  "ready-to-start": "Ready to start?",
+  "sign-in": "Sign In"
 }
