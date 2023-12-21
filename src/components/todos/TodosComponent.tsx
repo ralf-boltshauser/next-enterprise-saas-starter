@@ -13,13 +13,16 @@ import {
   useAddTodoMutation,
   useGetTodosQuery,
   useRemoveTodoMutation,
-} from "@/lib/features/todos/todosApi";
+  useUpdateTodoMutation,
+} from "@/lib/features/todos/todos.api";
 
 const TodosComponent = () => {
   const [input, setInput] = useState("");
   const { data: todos, isLoading, isError, error } = useGetTodosQuery();
   const [addTodo] = useAddTodoMutation();
   const [removeTodo] = useRemoveTodoMutation();
+  // update todo
+  const [updateTodo] = useUpdateTodoMutation();
 
   const handleAddTodo = async () => {
     if (input.trim() !== "") {
@@ -32,8 +35,12 @@ const TodosComponent = () => {
     }
   };
 
-  const handleDeleteTodo = async (todoId: number) => {
-    await removeTodo({ todoId });
+  const handleDeleteTodo = async (id: number) => {
+    // await removeTodo({ id });
+    await updateTodo({
+      id,
+      completed: true,
+    });
   };
 
   if (isLoading) return <div>Loading...</div>;

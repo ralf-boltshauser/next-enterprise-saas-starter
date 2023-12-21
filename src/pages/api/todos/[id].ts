@@ -1,10 +1,9 @@
-// pages/api/todos/index.ts
+// pages/api/todos/[id].ts
 
 import { TodoService } from "@/services/todo.service";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
-import { Todo } from "@prisma/client";
 
 export default async function handler(
   req: NextApiRequest,
@@ -15,16 +14,24 @@ export default async function handler(
     return res.status(401).json({ message: "Unauthorized" });
   }
 
-  const userId = session.user.id;
+  const todoId = parseInt(req.query.id as string, 10);
+  if (isNaN(todoId)) {
+    return res.status(400).json({ message: "Invalid ID" });
+  }
 
   try {
     if (req.method === "GET") {
-      const todos = await TodoService.getTodosByUser(userId);
-      return res.status(200).json(todos);
-    } else if (req.method === "POST") {
-      const todoData: Omit<Todo, "id"> = { ...req.body, userId };
-      const newTodo = await TodoService.createTodo(todoData);
-      return res.status(201).json(newTodo);
+      const todo = await TodoService.getTodoById(todoId);
+      return todo
+        ? res.status(200).json(todo)
+        : res.status(404).json({ message: "Todo not found" });
+    } else if (req.method === "PUT") {
+      const updateData = req.body;
+      const updatedTodo = await TodoService.updateTodo(todoId, updateData);
+      return res.status(200).json(updatedTodo);
+    } else if (req.method === "DELETE") {
+      await TodoService.deleteTodo(todoId);
+      return res.status(204).end();
     } else {
       return res.status(405).end(`Method ${req.method} Not Allowed`);
     }
