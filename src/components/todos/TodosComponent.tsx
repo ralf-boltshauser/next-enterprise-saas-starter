@@ -36,11 +36,7 @@ const TodosComponent = () => {
   };
 
   const handleDeleteTodo = async (id: number) => {
-    // await removeTodo({ id });
-    await updateTodo({
-      id,
-      completed: true,
-    });
+    await removeTodo({ id });
   };
 
   if (isLoading) return <div>Loading...</div>;
